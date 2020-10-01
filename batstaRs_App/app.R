@@ -93,11 +93,11 @@ shinyApp(ui = ui, server = server)
 
 
 ### A second Shiny App option
-
+    
 ## UI
 ui2 <- fluidPage(    
         plotOutput("plot", click = "plot_click"),
-        tableOutput("Data")
+        plotOutput("plot2")
     )
 
 ## Server
@@ -114,9 +114,19 @@ server2 <- function(input, output, session) {
                   legend.text = element_text(size = 5)) +
             guides(color = guide_legend(override.aes = list(size = 1))) })
     
-    output$Data <- renderTable({
-        nearPoints(LA_Data_Current, input$plot_click, xvar = LA_Data_Current$SpecificUseType, yvar=sum(LA_Data_Current$netTaxableValue))
-    })
+    observeEvent(input$plot_click, 
+                 {
+                     p <- nearPoints(LA_Data_Current, input$plot_click)
+                     LA_Data_2019_SpecUse <- p %>%
+                         group_by(SpecificUseType)
+                     
+                     output$plot2 <- renderPlot ({ggplot(data = LA_Data_2019_SpecUse, mapping = aes(x = reorder(SpecificUseType, -netTaxableValue), y = netTaxableValue)) +
+                         geom_bar(stat = 'identity') +
+                         theme_cowplot() +
+                         labs(y = "Net Taxable Value", x = "", title = "Net Taxable Value Across Specific Use Types in LA County" ) +
+                         theme(axis.text.y = element_text(size = 6)) +
+                         coord_flip() })    
+                 })
 }
 
 # Run the application 
