@@ -67,9 +67,8 @@ server <- function(input, output) {
         LA_Data_Current %>% 
             filter(LandBaseYear == input$year) %>% 
             group_by(SpecificUseType) %>%
-            summarise(mean = mean(netTaxableValue) )%>%
             
-            ggplot(data = LA_Data_Current, mapping = aes(x = reorder(SpecificUseType, mean), y = mean)) +
+            ggplot(data = LA_Data_Current, mapping = aes(x = reorder(SpecificUseType, netTaxableValue), y = netTaxableValue)) +
             geom_bar(stat = 'identity') +
             theme_cowplot() +
             labs(y = "Mean Net Taxable Value", x = "", title = "Mean Net Taxable Value Across Specific Use Types in LA County" ) +

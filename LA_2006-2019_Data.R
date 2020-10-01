@@ -6,6 +6,7 @@ library(forcats)
 ### Data Import and Cleaning
 #Download filtered data to desktop as .csv. This is only PropertyType = C/I
 LA_Data <- read_csv("Assessor_Parcels_Data_-_2006_thru_2019.csv")
+head(LA_Data)
 
 # Make factors
 LA_Data$GeneralUseType <- as.factor(LA_Data$GeneralUseType)
@@ -62,22 +63,21 @@ ggplot(data = LA_Data_2019, aes(x=LandBaseYear, y = netTaxableValue, fill = Gene
 ggplot(data = LA_Data_2019, aes(x=LandBaseYear, y = netTaxableValue, fill = SpecificUseType)) + 
   geom_bar(stat = 'identity', position = "stack") + 
   xlim(1975,2020) +
-  labs(x = "Land Assessment Year", y = "Net Taxable Value (USD)", fill = "Specific Use Type", title = "Net Taxable Value by Year Assessed in LA County") +
+  labs(x = "Land Assessment Year", y = "Net Taxable Value (USD)", fill = "Specific Use Type", title = "Commercial and Industrial Property Value in LA County") +
   theme_cowplot() +
   theme(legend.title = element_text(size = 5), 
         legend.text = element_text(size = 5)) +
   guides(color = guide_legend(override.aes = list(size = 1))) 
-ggsave("SpecUse_NetTaxValue.png", dpi = 320 )
+# ggsave("SpecUse_NetTaxValue.jpeg", width = 10, height = 6, dpi = 320) # This is for my own use (BR)
 
 # Plot of Net Taxable Value by Specifc Use Type
 LA_Data_2019_SpecUse <- LA_Data_2019 %>%
-  group_by(SpecificUseType) %>%
-  summarise(mean = mean(netTaxableValue))
+  group_by(SpecificUseType)
 
-ggplot(data = LA_Data_2019_SpecUse, aes(x = reorder(SpecificUseType, mean), y = mean)) +
+ggplot(data = LA_Data_2019_SpecUse, aes(x = reorder(SpecificUseType, -netTaxableValue), y = netTaxableValue)) +
   geom_bar(stat = 'identity') +
   theme_cowplot() +
-  labs(y = "Mean Net Taxable Value", x = "", title = "Mean Net Taxable Value Across Specific Use Types in LA County" ) +
+  labs(y = "Net Taxable Value", x = "", title = "Net Taxable Value Across Specific Use Types in LA County" ) +
   theme(axis.text.y = element_text(size = 6)) +
   coord_flip() 
 
