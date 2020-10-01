@@ -94,4 +94,32 @@ shinyApp(ui = ui, server = server)
 
 ### A second Shiny App option
 
+## UI
+ui2 <- fluidPage(    
+        plotOutput("plot", click = "plot_click"),
+        tableOutput("Data")
+    )
+
+## Server
+
+# Define a server for the Shiny app
+server2 <- function(input, output, session) {
+    output$plot <- renderPlot({
+            ggplot(data = LA_Data_Current, aes(x=LandBaseYear, y = netTaxableValue, fill = SpecificUseType)) + 
+            geom_bar(stat = 'identity', position = "stack") + 
+            xlim(1975,2020) +
+            labs(x = "Land Assessment Year", y = "Net Taxable Value (USD)", fill = "Specific Use Type", title = "Commercial and Industrial Property Value in LA County") +
+            theme_cowplot() +
+            theme(legend.title = element_text(size = 5), 
+                  legend.text = element_text(size = 5)) +
+            guides(color = guide_legend(override.aes = list(size = 1))) })
+    
+    output$Data <- renderTable({
+        nearPoints(LA_Data_Current, input$plot_click, xvar = LA_Data_Current$SpecificUseType, yvar=sum(LA_Data_Current$netTaxableValue))
+    })
+}
+
+# Run the application 
+shinyApp(ui = ui2, server = server2)
+
 
