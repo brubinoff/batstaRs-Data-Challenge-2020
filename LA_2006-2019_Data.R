@@ -20,11 +20,11 @@ LA_Data$SpecificUseType <- fct_collapse(LA_Data$SpecificUseType,
                                         Manufacturing = c("Heavy Manufacturing", "Wholesale and Manufacturing Outlet", "Light Manufacturing", "Service Station", "Lumber Yard", "Auto, Recreation Equipment, Construction Equipment Sales and Service", "Industrial"),
                                         Professional_Buildings_and_Offices = c("Office Building", "Bank, Savings and Loan", "Professional Building"),
                                         Mineral_Processing = "Mineral Processing",
-                                        Lodging = c("Hotel and Motel", "Animal Kennel"),
+                                        Lodging = "Hotel and Motel",
                                         Parking = c("Parking Lot (Commercial Use Property)", "Parking Lot (Industrial Use Property)"),
                                         Storage = c("Warehousing, Distribution, Storage", "Open Storage"),
-                                        Other = c("Camp", "(unavailable)", "Missing")
-)
+                                        Other = c("Camp", "(Missing)", "(unavailable)", "Missing", "Animal Kennel")
+  )
 
 
 #Subset the data to be only 2019
