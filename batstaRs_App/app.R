@@ -23,8 +23,19 @@ LA_Data <- read_csv("Assessor_Parcels_Data_-_2006_thru_2019.csv")
 LA_Data$GeneralUseType <- as.factor(LA_Data$GeneralUseType)
 LA_Data$SpecificUseType <- as.factor(LA_Data$SpecificUseType)
 LA_Data$SpecificUseType <-  fct_explicit_na(LA_Data$SpecificUseType, na_level = "Missing")
-LA_Data$LandBaseYear <- as.character(LA_Data$LandBaseYear)
-
+LA_Data$SpecificUseType <- fct_collapse(LA_Data$SpecificUseType, 
+    Sports_and_Recreation = c("Race Track", "Athletic and Amusement Facility", "Bowling Alley", "Golf Course", "Skating Rink", "Water Recreation", "Club, Lodge Hall, Fraternal Organization"),
+    Retail = c("Shopping Center (Regional)", "Department Store", "Shopping Center (Neighborhood, Community)", "Store Combination", "Store", "Nursery or Greenhouse", "Non-Auto Service and Repair Shop, Paint Shop, or Laundry", "Commercial"),
+    Food_Processing_and_Distribution = c("Food Processing Plant", "Supermarket", "Restaurant, Cocktail Lounge"),
+    Entertainment = c("Motion Picture, Radio and Television Industry", "Theater"),
+    Manufacturing = c("Heavy Manufacturing", "Wholesale and Manufacturing Outlet", "Light Manufacturing", "Service Station", "Lumber Yard", "Auto, Recreation Equipment, Construction Equipment Sales and Service", "Industrial"),
+    Professional_Buildings_and_Offices = c("Office Building", "Bank, Savings and Loan", "Professional Building"),
+    Mineral_Processing = "Mineral Processing",
+    Lodging = c("Hotel and Motel", "Animal Kennel"),
+    Parking = c("Parking Lot (Commercial Use Property)", "Parking Lot (Industrial Use Property)"),
+    Storage = c("Warehousing, Distribution, Storage", "Open Storage"),
+    Other = c("Camp", "(Missing)", "(unavailable)", "Missing")
+     )
 
 #Subset the data to be current assessment list
 LA_Data_Current <- LA_Data %>% 
@@ -42,7 +53,7 @@ ui <- fluidPage(
             
             # Define the sidebar with one input
             sidebarPanel(
-                selectInput("year", "Year:", 
+                selectInput("LandBaseYear", "Year:", 
                             choices=unique(LA_Data_Current$LandBaseYear)),
                 hr(),
                 helpText("Data from LA County Assessor updated last in 2019.")
@@ -65,7 +76,7 @@ server <- function(input, output) {
     output$BarPlot <- renderPlot({
         
         LA_Data_Current %>% 
-            filter(LandBaseYear == input$year) %>% 
+            filter(LandBaseYear == input$LandBaseYear) %>% 
             group_by(SpecificUseType) %>%
             
             ggplot(data = LA_Data_Current, mapping = aes(x = reorder(SpecificUseType, netTaxableValue), y = netTaxableValue)) +

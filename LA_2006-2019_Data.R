@@ -12,7 +12,20 @@ head(LA_Data)
 LA_Data$GeneralUseType <- as.factor(LA_Data$GeneralUseType)
 LA_Data$SpecificUseType <- as.factor(LA_Data$SpecificUseType)
 LA_Data$SpecificUseType <-  fct_explicit_na(LA_Data$SpecificUseType, na_level = "Missing")
-levels(LA_Data$SpecificUseType)
+LA_Data$SpecificUseType <- fct_collapse(LA_Data$SpecificUseType, 
+                                        Sports_and_Recreation = c("Race Track", "Athletic and Amusement Facility", "Bowling Alley", "Golf Course", "Skating Rink", "Water Recreation", "Club, Lodge Hall, Fraternal Organization"),
+                                        Retail = c("Shopping Center (Regional)", "Department Store", "Shopping Center (Neighborhood, Community)", "Store Combination", "Store", "Nursery or Greenhouse", "Non-Auto Service and Repair Shop, Paint Shop, or Laundry", "Commercial"),
+                                        Food_Processing_and_Distribution = c("Food Processing Plant", "Supermarket", "Restaurant, Cocktail Lounge"),
+                                        Entertainment = c("Motion Picture, Radio and Television Industry", "Theater"),
+                                        Manufacturing = c("Heavy Manufacturing", "Wholesale and Manufacturing Outlet", "Light Manufacturing", "Service Station", "Lumber Yard", "Auto, Recreation Equipment, Construction Equipment Sales and Service", "Industrial"),
+                                        Professional_Buildings_and_Offices = c("Office Building", "Bank, Savings and Loan", "Professional Building"),
+                                        Mineral_Processing = "Mineral Processing",
+                                        Lodging = c("Hotel and Motel", "Animal Kennel"),
+                                        Parking = c("Parking Lot (Commercial Use Property)", "Parking Lot (Industrial Use Property)"),
+                                        Storage = c("Warehousing, Distribution, Storage", "Open Storage"),
+                                        Other = c("Camp", "(unavailable)", "Missing")
+)
+
 
 #Subset the data to be only 2019
 LA_Data_2019 <- LA_Data %>% 
@@ -74,7 +87,7 @@ ggplot(data = LA_Data_2019, aes(x=LandBaseYear, y = netTaxableValue, fill = Spec
 LA_Data_2019_SpecUse <- LA_Data_2019 %>%
   group_by(SpecificUseType)
 
-ggplot(data = LA_Data_2019_SpecUse, aes(x = reorder(SpecificUseType, -netTaxableValue), y = netTaxableValue)) +
+ggplot(data = LA_Data_2019_SpecUse, mapping = aes(x = reorder(SpecificUseType, -netTaxableValue), y = netTaxableValue)) +
   geom_bar(stat = 'identity') +
   theme_cowplot() +
   labs(y = "Net Taxable Value", x = "", title = "Net Taxable Value Across Specific Use Types in LA County" ) +
