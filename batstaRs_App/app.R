@@ -161,7 +161,8 @@ server2 <- function(input, output, session) {
                          geom_bar(stat = 'identity') +
                          theme_classic() +
                          labs(y = "Net Taxable Value", x = "", title = round(input$plot_click$x, digits = 0)) +
-                         theme(axis.text.y = element_text(size = 10, angle = 30),
+                         theme(axis.text.y = element_text(size = 10, hjust = 1),
+                               axis.text.x = element_text(),
                                plot.title = element_text(face = "bold"),
                                legend.position = "none") +
                          scale_y_continuous(labels = comma) +
