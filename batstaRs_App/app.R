@@ -120,7 +120,8 @@ server2 <- function(input, output, session) {
                      LA_Data_2019_SpecUse <- p %>%
                          group_by(SpecificUseType)
                      
-                     output$plot2 <- renderPlot ({ggplot(data = LA_Data_2019_SpecUse, mapping = aes(x = reorder(SpecificUseType, -netTaxableValue), y = netTaxableValue)) +
+                     output$plot2 <- renderPlot ({
+                         ggplot(data = LA_Data_2019_SpecUse, mapping = aes(x = reorder(SpecificUseType, -netTaxableValue), y = netTaxableValue)) +
                          geom_bar(stat = 'identity') +
                          theme_cowplot() +
                          labs(y = "Net Taxable Value", x = "", title = "Net Taxable Value Across Specific Use Types in LA County" ) +
