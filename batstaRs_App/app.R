@@ -42,6 +42,19 @@ LA_Data$SpecificUseType <- fct_collapse(LA_Data$SpecificUseType,
                                         Storage = c("Warehousing, Distribution, Storage", "Open Storage"),
                                         Other = c("Camp", "(Missing)", "(unavailable)", "Missing", "Animal Kennel", "", " ") #MH: added blank option
 )
+LA_Data$SpecificUseType <- fct_relevel(LA_Data$SpecificUseType, sort) #Reorder the factor levels alphabetically
+levels(LA_Data$SpecificUseType) = c("Entertainment", 
+                                    "Food, Processing, and Distribution",
+                                    "Lodging",
+                                    "Manufacturing",
+                                    "Mineral Processing",
+                                    "Other",
+                                    "Parking",
+                                    "Professional Buildings and Offices",
+                                    "Retail",
+                                    "Sports and Recreation",
+                                    "Storage") #Type out full name for better display on graph
+
 
 #remove extraneous rows that have LandBaseYear as 0 
 LA_Data <- subset(LA_Data, LandBaseYear !=0)
@@ -132,8 +145,9 @@ server2 <- function(input, output, session) {
             xlim(1975,2020) +
             labs(x = "Land Assessment Year", y = "Net Taxable Value (USD)", fill = "Specific Use Type", title = "Commercial and Industrial Property Value in LA County") +
             theme_cowplot() +
-            theme(legend.title = element_text(size = 5), 
-                  legend.text = element_text(size = 5)) +
+            theme(legend.title = element_text(size = 12, face = "bold"), 
+                  legend.text = element_text(size = 10),
+                  plot.title = element_text(hjust = 0.5)) +
             guides(color = guide_legend(override.aes = list(size = 1))) })
     
     observeEvent(input$plot_click, 
@@ -143,12 +157,15 @@ server2 <- function(input, output, session) {
                          group_by(SpecificUseType)
                      
                      output$plot2 <- renderPlot ({
-                       ggplot(data = LA_Data_2019_SpecUse, mapping = aes(reorder(SpecificUseType, -netTaxableValue), netTaxableValue)) +
+                       ggplot(data = LA_Data_2019_SpecUse, mapping = aes(x = SpecificUseType, y = netTaxableValue, fill = SpecificUseType)) +
                          geom_bar(stat = 'identity') +
                          theme_classic() +
-                         labs(y = "Mean Net Taxable Value", x = "", title = round(input$plot_click$x, digits = 0)) +
-                         theme(axis.text.y = element_text(size = 10, angle = 30)) +
+                         labs(y = "Net Taxable Value", x = "", title = round(input$plot_click$x, digits = 0)) +
+                         theme(axis.text.y = element_text(size = 10, angle = 30),
+                               plot.title = element_text(face = "bold"),
+                               legend.position = "none") +
                          scale_y_continuous(labels = comma) +
+                         guides(color = guide_legend(override.aes = list(size = 1))) +
                          coord_flip() 
                      })
                  })
