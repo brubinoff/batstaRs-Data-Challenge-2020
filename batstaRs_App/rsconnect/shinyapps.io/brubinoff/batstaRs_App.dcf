@@ -1,0 +1,13 @@
+name: batstaRs_App
+title: batstaRs_App
+username:
+account: brubinoff
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 2938831
+bundleId: 3699628
+url: https://brubinoff.shinyapps.io/batstaRs_App/
+when: 1601768023.85194
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: Assessor_Parcels_Data_-_2006_thru_2019.csv
