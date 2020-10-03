@@ -65,6 +65,10 @@ LA_Data_Current <- LA_Data %>%
 #list the years in descending order so that when we call the dropdown menu it's in a sensible order
 LA_Data_Current <- LA_Data_Current[order(-LA_Data_Current$LandBaseYear),]
 
+#Convert the taxable value to billions
+LA_Data_Current <- LA_Data_Current %>% 
+  mutate(netTaxableValue = netTaxableValue/1e9)
+
 #Now, that the data is cleaned up, we are going to begin writing the ShinyApp, which will produce an interactive graph
 #It requires two separate entities: the User Interface (UI) and the Server
 ## UI is the first step in building the app
@@ -147,7 +151,7 @@ server2 <- function(input, output, session) {
       scale_fill_grey() +
       xlim(1975,2020) +
       labs(x = "Land Assessment Year", 
-           y = "Net Taxable Value (USD)", 
+           y = "Net Taxable Value in Billions (USD)", 
            fill = "General Use Type", 
            title = "Commercial and Industrial Property Value in LA County", 
            subtitle = "Data Visualization for Prop 15 by the bat staRs",
@@ -170,16 +174,19 @@ server2 <- function(input, output, session) {
                  selectionyear <- median(p$LandBaseYear)
                  LA_Data_2019_SpecUse <- LA_Data_Current %>%
                    filter(LandBaseYear == selectionyear) %>%
-                   group_by(SpecificUseType)
+                   group_by(SpecificUseType) %>% 
+                   summarize(netTaxableValue = sum(netTaxableValue), LandBaseYear = mean(LandBaseYear)) 
                  
                  output$plot2 <- renderPlot ({
                    ggplot(data = LA_Data_2019_SpecUse, mapping = aes(x = SpecificUseType, y = netTaxableValue, fill = SpecificUseType)) +
                      geom_bar(stat = 'identity') +
+                     geom_text(aes(label=paste0(SpecificUseType),
+                                   hjust=ifelse(netTaxableValue < (max(netTaxableValue)*0.6), -0.03, 1.1)),) +# put labels inside
                      theme_classic() +
-                     labs(y = "Net Taxable Value (USD)", x = "", title = round(input$plot_click$x, digits = 0)) +
-                     theme(axis.text.y = element_text(size = 12),
+                     labs(y = "Net Taxable Value in Billions (USD)", x = "Specific Land Uses", title = round(input$plot_click$x, digits = 0)) +
+                     theme(axis.text.y = element_blank(),
                            axis.text.x = element_text(size = 12),
-                           axis.title.y = element_blank(),
+                           axis.title.y = element_text(size = 12),
                            legend.position = "none",
                            plot.title = element_text(face = "bold")) +
                      scale_y_continuous(labels = comma) +
@@ -190,4 +197,6 @@ server2 <- function(input, output, session) {
 }
 # Run the application 
 shinyApp(ui = ui2, server = server2)
+
+
 
