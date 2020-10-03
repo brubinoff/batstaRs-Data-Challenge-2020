@@ -16,6 +16,7 @@ library(rsconnect)
 
 ### Data Import and Cleaning
 #Download filtered data to desktop as .csv. This is only PropertyType = C/I
+# Note, CSV needs to be converted to .Rdata for size reasons. Remove the # below and run code to do this.
 # LA_Data <- read.csv("Assessor_Parcels_Data_-_2006_thru_2019.csv")
 # save(LA_Data, file = "Assessor_Parcels_Data_-_2006_thru_2019.Rdata")
 load("Assessor_Parcels_Data_-_2006_thru_2019.Rdata")
