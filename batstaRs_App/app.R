@@ -16,7 +16,9 @@ library(rsconnect)
 
 ### Data Import and Cleaning
 #Download filtered data to desktop as .csv. This is only PropertyType = C/I
-LA_Data <- read.csv("Assessor_Parcels_Data_-_2006_thru_2019.csv")
+# LA_Data <- read.csv("Assessor_Parcels_Data_-_2006_thru_2019.csv")
+# save(LA_Data, file = "Assessor_Parcels_Data_-_2006_thru_2019.Rdata")
+load("Assessor_Parcels_Data_-_2006_thru_2019.Rdata")
 
 #MH: removing non-essential columns to ease formatting
 LA_Data <- LA_Data %>% select(GeneralUseType, LandBaseYear, SpecificUseType, netTaxableValue, RollYear)
