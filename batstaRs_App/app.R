@@ -130,47 +130,64 @@ shinyApp(ui = ui, server = server)
 ### A second Shiny App option
 
 ## UI
-ui2 <- fluidPage(    
-  plotOutput("plot", click = "plot_click"),
-  plotOutput("plot2")
+ui2 <- fluidPage( 
+  mainPanel(
+    plotOutput("plot", click = "plot_click", width = "100%"),
+    plotOutput("plot2", width = "75%")
+  )
 )
 
 ## Server
 
 # Define a server for the Shiny app
 server2 <- function(input, output, session) {
-    output$plot <- renderPlot({
-            ggplot(data = LA_Data_Current, aes(x=LandBaseYear, y = netTaxableValue, fill = SpecificUseType)) + 
-            geom_bar(stat = 'identity', position = "stack") + 
-            xlim(1975,2020) +
-            labs(x = "Land Assessment Year", y = "Net Taxable Value (USD)", fill = "Specific Use Type", title = "Commercial and Industrial Property Value in LA County") +
-            theme_cowplot() +
-            theme(legend.title = element_text(size = 12, face = "bold"), 
-                  legend.text = element_text(size = 10),
-                  plot.title = element_text(hjust = 0.5)) +
-            guides(color = guide_legend(override.aes = list(size = 1))) })
-    
-    observeEvent(input$plot_click, 
-                 {
-                     p <- nearPoints(LA_Data_Current, input$plot_click)
-                     LA_Data_2019_SpecUse <- p %>%
-                         group_by(SpecificUseType)
-                     
-                     output$plot2 <- renderPlot ({
-                       ggplot(data = LA_Data_2019_SpecUse, mapping = aes(x = SpecificUseType, y = netTaxableValue, fill = SpecificUseType)) +
-                         geom_bar(stat = 'identity') +
-                         theme_classic() +
-                         labs(y = "Net Taxable Value", x = "", title = round(input$plot_click$x, digits = 0)) +
-                         theme(axis.text.y = element_text(size = 10, hjust = 1),
-                               axis.text.x = element_text(),
-                               plot.title = element_text(face = "bold"),
-                               legend.position = "none") +
-                         scale_y_continuous(labels = comma) +
-                         guides(color = guide_legend(override.aes = list(size = 1))) +
-                         coord_flip() 
-                     })
-                 })
-}
+  output$plot <- renderPlot({
+    ggplot(data = LA_Data_Current, aes(x=LandBaseYear, y = netTaxableValue, fill = GeneralUseType)) + 
+      geom_bar(stat = 'identity', position = "stack") + 
+      scale_fill_grey() +
+      xlim(1975,2020) +
+      labs(x = "Land Assessment Year", 
+           y = "Net Taxable Value (USD)", 
+           fill = "General Use Type", 
+           title = "Commercial and Industrial Property Value in LA County", 
+           subtitle = "Data Visualization for Prop 15 by the bat staRs",
+           caption = "(Click at the base of each bar on the x-axis to display specific use types in each year)") +
+      theme_cowplot() +
+      theme(legend.title = element_text(size = 12, face = "bold"), 
+            legend.text = element_text(size = 10),
+            axis.text.y = element_text(),
+            plot.title = element_text(hjust = 0.5),
+            plot.subtitle = element_text(hjust = 0.5),
+            plot.caption = element_text(hjust = 0.5, face = "italic")
+      ) +
+      scale_y_continuous(labels = comma) +
+      guides(color = guide_legend(override.aes = list(size = 1))) })
   
+  observeEvent(input$plot_click, 
+               {
+                 p <- nearPoints(LA_Data_Current, input$plot_click)
+                 #Get the year of the click
+                 selectionyear <- median(p$LandBaseYear)
+                 LA_Data_2019_SpecUse <- LA_Data_Current %>%
+                   filter(LandBaseYear == selectionyear) %>%
+                   group_by(SpecificUseType)
+                 
+                 output$plot2 <- renderPlot ({
+                   ggplot(data = LA_Data_2019_SpecUse, mapping = aes(x = SpecificUseType, y = netTaxableValue, fill = SpecificUseType)) +
+                     geom_bar(stat = 'identity') +
+                     theme_classic() +
+                     labs(y = "Net Taxable Value (USD)", x = "", title = round(input$plot_click$x, digits = 0)) +
+                     theme(axis.text.y = element_text(size = 12),
+                           axis.text.x = element_text(size = 12),
+                           axis.title.y = element_blank(),
+                           legend.position = "none",
+                           plot.title = element_text(face = "bold")) +
+                     scale_y_continuous(labels = comma) +
+                     guides(color = guide_legend(override.aes = list(size = 1))) +
+                     coord_flip() 
+                 })
+               })
+}
 # Run the application 
 shinyApp(ui = ui2, server = server2)
+
