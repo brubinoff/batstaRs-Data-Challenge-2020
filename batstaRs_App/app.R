@@ -82,7 +82,7 @@ LA_Data_Current <- LA_Data_Current %>%
 ui <- fluidPage( 
   mainPanel(
     plotOutput("plot", click = "plot_click", width = "100%"),
-    plotOutput("plot2", height = "75%", width = "75%")
+    plotOutput("plot2", width = "75%")
   )
 )
 
@@ -111,8 +111,7 @@ server <- function(input, output, session) {
             plot.caption = element_text(hjust = 0.5, face = "italic")
       ) +
       scale_y_continuous(labels = comma) +
-      guides(color = guide_legend(override.aes = list(size = 1))) 
-    })
+      guides(color = guide_legend(override.aes = list(size = 1))) })
   
   # Extract data from click on first plot (Year)
   observeEvent(input$plot_click, 
