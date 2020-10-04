@@ -96,7 +96,7 @@ server <- function(input, output, session) {
   # Create main plot with data on all years
   output$plot <- renderPlot({
     ggplot(data = LA_Data_Current, aes(x=LandBaseYear, y = netTaxableValue, fill = GeneralUseType)) + 
-      geom_col(position = "stack", color = NA, width = 0.98) + 
+      geom_col(position = "stack", color = NA, width = 0.8) + 
       scale_fill_grey() +
       xlim(1975,2020) +
       labs(x = "Land Assessment Year", 
