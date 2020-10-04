@@ -5,8 +5,8 @@ account: brubinoff
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 2939219
-bundleId: 3699889
+bundleId: 3699919
 url: https://brubinoff.shinyapps.io/batstaRs_App/
-when: 1601780052.63418
+when: 1601781354.35322
 asMultiple: FALSE
 asStatic: FALSE
