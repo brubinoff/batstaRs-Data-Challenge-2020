@@ -130,7 +130,7 @@ server <- function(input, output, session) {
                    ggplot(data = LA_Data_2019_SpecUse, mapping = aes(x = SpecificUseType, y = netTaxableValue, fill = SpecificUseType)) +
                      geom_bar(stat = 'identity') +
                      geom_text(aes(label=paste0(SpecificUseType),
-                                   hjust=ifelse(netTaxableValue < (max(netTaxableValue)*0.6), -0.03, 1.1)),) +# put labels inside
+                                   hjust=ifelse(netTaxableValue < (max(netTaxableValue)*0.6), -0.03, 1.1)), fontface = 'bold') + # put labels inside
                      theme_classic() +
                      labs(y = "Net Taxable Value in Billions (USD)", x = "Specific Land Uses", title = round(input$plot_click$x, digits = 0)) +
                      theme(axis.text.y = element_blank(),
