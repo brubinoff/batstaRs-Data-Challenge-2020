@@ -14,6 +14,8 @@ library(forcats)
 library(scales)
 library(rsconnect)
 
+#setwd("~/Desktop/batstaRs-Data-Challenge-2020/batstaRs_App")
+
 ### Data Import and Cleaning
 #Download filtered data to desktop as .csv. This is only PropertyType = C/I
 # Note, CSV needs to be converted to .Rdata for size reasons. Remove the # below and run code to do this.
@@ -79,7 +81,8 @@ LA_Data_Current <- LA_Data_Current %>%
 # Fluid page layout auto decides how big to make each part of the page based on the resolution of each image, 
 # This makes it easier than having to define the size of each individual component 
 
-ui <- fluidPage( 
+ui <- fluidPage(
+  titlePanel("CA 2020 Election Data Challenge: Proposition 15 (bat staRs)"),
   mainPanel(
     plotOutput("plot", click = "plot_click", width = "100%"),
     plotOutput("plot2", width = "75%")
@@ -93,21 +96,19 @@ server <- function(input, output, session) {
   # Create main plot with data on all years
   output$plot <- renderPlot({
     ggplot(data = LA_Data_Current, aes(x=LandBaseYear, y = netTaxableValue, fill = GeneralUseType)) + 
-      geom_col(position = "stack", color = NA, border = NA, size = 0) + 
+      geom_col(position = "stack", color = NA) + 
       scale_fill_grey() +
       xlim(1975,2020) +
       labs(x = "Land Assessment Year", 
            y = "Net Taxable Value in Billions (USD)", 
            fill = "General Use Type", 
            title = "Commercial and Industrial Property Value in LA County", 
-           subtitle = "Data Visualization for Prop 15 by the bat staRs",
            caption = "(Click at the base of each bar on the x-axis to display specific use types in each year)") +
       theme_cowplot() +
       theme(legend.title = element_text(size = 12, face = "bold"), 
             legend.text = element_text(size = 10),
             axis.text.y = element_text(),
             plot.title = element_text(hjust = 0.5),
-            plot.subtitle = element_text(hjust = 0.5),
             plot.caption = element_text(hjust = 0.5, face = "italic")
       ) +
       scale_y_continuous(labels = comma) +
