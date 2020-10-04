@@ -7,14 +7,14 @@ output: html_document
 
 ## Proposition 15 Data Exploration: Commercial Tax Revenue by Assessment Year in LA County
 ### About
-This is a submission to the UC Davis Datalab California Elections Data Challenge. This tool is intended to give voters context and information pertinent to Proposition 15. Proposition 15 would change the taxable value of commercial and industrial properties from their value at purchase (plus a 2% correction for inflation) to their current market value. 
+This is the BatstaRs submission to the UC Davis Datalab California Elections Data Challenge. This tool is intended to give voters context and information pertinent to Proposition 15. Proposition 15 would change the taxable value of commercial and industrial properties from their value at purchase (plus a 2% correction for inflation) to their current market value. 
 
 Our interactive data viewer allows voters to explore how the tax burden is distributed in LA County between properties purchased decades ago and those purchased more recently, as well as within and between different commercial industries. Viewers will initially see a graph of commercial and industrial taxable value organized by assessment year. By clicking on an individual year, viewers will open a graph breaking that assessment year's data into eleven different industry types. Property values have risen much faster than inflation over the past 42 years; this tool allows viewers explore the relationship of those changes to specific commercial industries. 
 
 ### Cite As
 Rubinoff, B., Heineke, M., Kennedy, E., (2020). BatstaRs Proposition 15 Submission. UC Davis Datalab CA Election Data Challenge. http://brubinoff.shinyapps.io/batstaRs_App
 
-### Contributers
+### Contributers 
 - Benjamin Rubinoff 
 - Marcella Heineke
 - Esther Kennedy
