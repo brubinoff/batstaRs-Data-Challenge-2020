@@ -34,6 +34,19 @@ Our analysis focused on the following data columns:
 - SpecificUseType: the specific use of the parcel as defined by 39 catagories (e.g., "Animal Kennel" or "Theater"). We combined these to make a more concise list of 11 categories.
 - LandBaseYear: the year the property tax rate is based on. This is set by the purchase year by law.
 
+We compiled the original 39 specific use types into 11 categories. The code for this is included in our app.R script. Our eleven use categories and their components within the SpecificUseType column are as follows:
+- Sports and Recreation: "Race Track", "Athletic and Amusement Facility", "Bowling Alley", "Golf Course", "Skating Rink", "Water Recreation", "Club, Lodge Hall, Fraternal Organization"
+- Retail: "Shopping Center (Regional)", "Department Store", "Shopping Center (Neighborhood, Community)", "Store Combination", "Store", "Nursery or Greenhouse", "Non-Auto Service and Repair Shop, Paint Shot, or Laundry", "Commercial"
+- Food Processing and Distribution: "Food Processing Plant", "Supermarket", "Restaurant", "Cocktail Lounge"
+- Entertainment: "Motion Picture, Radio and Television Industry", "Theater"
+- Manufacturing: "Heavy Manufacturing", "Wholesale and Manufacturing Outlet", "Light Manufacturing", "Service Station", "Lumber Yard", "Auto, Recreation Equipment, Construction Equipment Sales and Service"
+- Professional Buildings and Offices: "Office Building", "Bank, Savings and Loan", "Professional Building"
+- Mineral Processing: "Mineral Processing"
+- Lodging: "Hotel and Motel"
+- Parking: "Parking Lot (Commercial Use Property)", "Parking Lot (Industrial Use Property)"
+- Storage: "Warehousing, Distribution, Storage", "Open Storage"
+- Other: "Camp", "(Missing)", "(unavailable)", "Missing", "Animal Kennel", ""
+
 ### Repo Contents
 The code for data cleaning, the shiny app and the shinyapp.io is stored in [batstaRs_App/](https://github.com/brubinoff/batstaRs-Data-Challenge-2020/tree/master/batstaRs_App) of this repo. The data cleaning and app code are in the same R script titled "app.R". Code has been commented extensively.
 
